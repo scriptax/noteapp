@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Memo App</title>
+        <link rel="stylesheet" href="memo.css">
+        <link rel="stylesheet" 
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" 
+        />
+    </head>
+    <body>
+        <div id="memos-container">
+            <ul>
+            <li id="new-note-btn" class="top-icons">
+                <span class="material-symbols-outlined">Add</span>
+            </li>
+            <li class="icon-detail">
+                New Note
+            </li>
+            <li id="new-folder-btn" class="top-icons">
+                <span  class="material-symbols-outlined">create_new_folder</span>
+            </li>
+            <li class="icon-detail">
+                New Group
+                <div id="create-folder-div">
+                    <input id="new-folder-name" type="text" placeholder="Group name">
+                    <button id="cancel-folder-btn">Cancel</button>
+                    <button id="create-folder-btn">Create</button>
+                </div>
+            </li>
+            <li id="search-area" class="top-icons">
+                <span class="material-symbols-outlined">search</span>
+                <input id="search-box" type="text" placeholder="Search Notes">
+            </li>
+            <li>
+                <input id="light-dark-switch" type="checkbox">
+                <label id="light-dark-div" for="light-dark-switch">
+                    <span class="material-symbols-outlined">light_mode</span>
+                    <span class="material-symbols-outlined">dark_mode</span>
+                    <i id="light-dark-slider"></i>
+                </label>
+            </li>
+            </ul>
+            <div id="all-notes-div">
+                <span>All Items</span>
+                <span id="all-notes-count">0 Notes |</span>
+                <span id="all-folders-count">0 Groups</span>
+            </div>
+        </div>
+        <div id="folder-move-div">
+            Move To...
+            <button id="cancel-move-btn">Cancel</button>
+            <div id="move-to-all" class="folder-move-item">All Notes</div>
+        </div>
+        <div id="edit-area-container">
+            <input id="new-note-name" type="text" placeholder="Title">
+            <button id="create-note-btn">Save</button>
+            <button id="discard-note-btn">Discard</button>
+            <textarea id="new-note-text" placeholder="Write your note here"></textarea>
+        </div>
+    </body>
+    <script src="memo.js"></script>
+</html>
