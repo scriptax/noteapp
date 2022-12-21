@@ -247,6 +247,7 @@ body {
     box-shadow: 0px 1px 5px var(--shadow_color);
     cursor: pointer;
 }
+
 .folder:hover, .note:hover, #all-notes-div:hover {background-color: var(--list_hover_bg);}
 .note {
     border-left: 5px tomato solid;
@@ -257,14 +258,17 @@ body {
 }
 #all-notes-count {right: 65px;}
 #all-folders-count {right: 10px;}
-
-.folder, .note{display: flex;}
-.folder > span:nth-child(2) {
-    font-size: 12px;
+.item-type-icon{
+    font-size: 20px;
     position: absolute;
-    right: 57px;
-    transform: translate(50%, 0);
+    left: 5px;
+    bottom: 3px;
 }
+.folder-name, .note-title{
+    position: relative;
+    left: 25px;
+}
+.folder, .note{display: flex;}
 .folder > span:nth-child(3) {
     font-size: 20px;
     position: absolute;
