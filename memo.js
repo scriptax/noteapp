@@ -19,6 +19,7 @@ window.addEventListener('load', () => {
 
     let storageKeys = Object.keys(localStorage);
     for(let key of storageKeys) {
+        if(/^[0-9]/.test) continue;
         const storageValue = readStorage(key);
         if(key.includes("folder")) {
             if(localStorage.getItem(key).includes("AllItems")) continue;
@@ -99,7 +100,7 @@ const noteHandler = {
                 noteText,
                 storageValue.Fldr
                 );
-            this.notes[`${storageValue.index}`].firstChild.innerHTML = noteName;
+            this.notes[`${storageValue.index}`].childNodes[1].innerHTML = noteName;
             this.closeNoteEditor();
             return undefined;
         }
