@@ -8,8 +8,12 @@
     --window_border_radius: 4px;
 }
 * {
+    padding: 0;
+    margin: 0;
+    border: 0;
     box-sizing: border-box;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 body {
     background-image: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(252,176,69,1) 100%);
@@ -34,7 +38,8 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background-color: #777;
 }
-/*Style main containers*/
+
+/*Overall style of main container and note editor*/
 [id$="container"] {
     position: absolute;
     top: 10%;
@@ -68,7 +73,7 @@ body {
     #edit-area-container {width: 26%;}
 }
 
-/*Style memo list top bar icons*/
+/*Style top bar icons*/
 .material-symbols-outlined {margin-top: 8px;}
 #memos-container ul {
     list-style-type: none;
@@ -111,6 +116,7 @@ body {
     width: 76px;
     color: royalblue;
 }
+
 /*Search box style*/
 #search-area {
     width: 150px;
@@ -129,6 +135,7 @@ body {
     transition-duration: 0.2s;
     transition-timing-function: linear;
 }
+
 /*Light-dark mode button styling*/
 #light-dark-switch {
     visibility: hidden;
@@ -172,13 +179,12 @@ body {
     background-color: white;
 }
 
-/*Create folder modal*/
+/*Group creator modal*/
 #create-folder-div {
     position: absolute;
     z-index: 2;
     top: 70px;
     left: 50%;
-    transform: translate(-50%);
     width: 90%;
     height: 50px;
     border-radius: 5px;
@@ -186,7 +192,7 @@ body {
     background-color: var(--bg_color);
     padding-top: 10px;
     padding-left: 5px;
-    transform: scale(0,0) translate(-50%, 0);
+    transform: scale(0) translate(-50%, 0);
     transform-origin: 0;
     transition-duration: 0.3s;
 }
@@ -232,8 +238,8 @@ body {
     background-color: red;
     cursor: pointer;
 }
-/*Folders*/
 
+/*Notes and groups*/
 .folder, .note, #all-notes-div {
     float: left;
     position: relative;
@@ -247,10 +253,11 @@ body {
     box-shadow: 0px 1px 5px var(--shadow_color);
     cursor: pointer;
 }
-
-.folder:hover, .note:hover, #all-notes-div:hover {background-color: var(--list_hover_bg);}
 .note {
     border-left: 5px tomato solid;
+}
+.folder:hover, .note:hover, #all-notes-div:hover {
+    background-color: var(--list_hover_bg);
 }
 #all-notes-count, #all-folders-count {
     position: absolute;
@@ -291,7 +298,7 @@ body {
 }
 .note .note-delete:hover {color: red;}
 
-/*Move-note-to-group container*/
+/*Move-note-to-group modal*/
 #folder-move-div {
     position: absolute;
     z-index: 2;
@@ -352,7 +359,7 @@ body {
 }
 .folder-move-item:hover {background-color: var(--list_hover_bg);}
 
-/*new note container*/
+/*Note editor modal*/
 #new-note-name {
     color: var(--text_color);
     font-size: 14px;
