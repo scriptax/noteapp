@@ -19,7 +19,7 @@ window.addEventListener('load', () => {
 
     let storageKeys = Object.keys(localStorage);
     for(let key of storageKeys) {
-        if(/^[0-9]/.test) continue;
+        if(!/^[0-9]/.test) continue;
         const storageValue = readStorage(key);
         if(key.includes("folder")) {
             if(localStorage.getItem(key).includes("AllItems")) continue;
@@ -220,7 +220,7 @@ const folderHandler = {
         folderContainer.innerHTML = 
         `<span class="material-symbols-outlined item-type-icon">folder</span>`+
         `<span class="folder-name">${folderName}</span>` +
-        '<span class="material-symbols-outlined folder-delete" title="Delete Note">delete</span>';
+        '<span class="material-symbols-outlined folder-delete" title="Delete Group">delete</span>';
         noteToFolderItem.innerHTML = folderName;
     
         parentContainer.insertBefore(folderContainer, allNotesFolder.nextSibling);
