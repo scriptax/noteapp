@@ -48,10 +48,10 @@ body {
     box-shadow: 0px 5px 10px 5px var(--shadow_color);
     padding: 20px 10px;
     overflow: auto;
-    transition-duration: 0.3s;
+    transition: transform 0.3s;
 }
 #memos-container {
-    width: 100%;  
+    width: 99%;  
     height: 80%;
     left: 50%;
     transform: translate(-50%, 0);
@@ -59,8 +59,8 @@ body {
 #edit-area-container {
     width: 96%;
     height: 60%;
-    left: 50%;
     top: 20%;
+    left: 50%;
     transform: scale(0) translate(-50%, 0);
     transform-origin: 0% 50%;
 }
@@ -87,7 +87,7 @@ body {
     border-radius: 20px;
     cursor: pointer;
     text-align: center;
-    transition-duration: 0.4s;
+    transition: color 0.2s, transform 0.4s;
 }
 #new-note-btn:hover {
     transform: rotate(180deg);
@@ -101,18 +101,18 @@ body {
 }
 .icon-detail {
     float: left;
-    font-size: 14px;
-    padding-top: 10px;
-    transition-duration: 0.4s;
     width: 0;
-    overflow: hidden;
+    font-size: 14px;
     white-space: nowrap;
+    padding-top: 10px;
+    overflow: hidden;
+    transition: width 0.4s;
 }
-.top-icons:nth-child(1):hover + .icon-detail {
+#new-note-btn:hover + .icon-detail {
     width: 70px;
     color: tomato;
 }
-.top-icons:nth-child(3):hover  + .icon-detail {
+#new-folder-btn:hover  + .icon-detail {
     width: 76px;
     color: royalblue;
 }
@@ -122,18 +122,15 @@ body {
     width: 150px;
     cursor: default;
 }
-
 #search-box {
     color: var(--text_color);
+    font-size: 14px;
     position: relative;
     bottom: 6px;
     width: 70%;
-    font-size: 14px;
     background-color: transparent;
     border: 0;
     outline: 0;
-    transition-duration: 0.2s;
-    transition-timing-function: linear;
 }
 
 /*Light-dark mode button styling*/
@@ -145,18 +142,17 @@ body {
 }
 #light-dark-div {
     position: absolute;
-    right: 20px;
     top: 27px;
+    right: 20px;
     height: 26px;
-    border-radius: 13px;
     padding: 4px 5px;
+    border-radius: 13px;
     background-color: black;
-    transition-duration: 0.4s;
 }
 #light-dark-div:hover {cursor: pointer;}
 #light-dark-div > span {
-    font-size: 18px;
     color: white;
+    font-size: 18px;
     line-height: 0;
 }
 #light-dark-slider {
@@ -167,10 +163,10 @@ body {
     height: 20px;
     border-radius: 10px;
     background-color: grey;
-    transition-duration: 0.4s;
+    transition: transform 0.3s;
 }
 #light-dark-switch:checked ~ #light-dark-div > #light-dark-slider {
-    transform: translate(24px,0);
+    transform: translate(24px, 0);
 }
 #light-dark-switch:checked ~ #light-dark-div > span {
     color: black;
@@ -187,69 +183,63 @@ body {
     left: 50%;
     width: 90%;
     height: 50px;
+    padding: 10px 0 0 5px;
     border-radius: 5px;
-    box-shadow: 0px 2px 5px 2px var(--shadow_color);
     background-color: var(--bg_color);
-    padding-top: 10px;
-    padding-left: 5px;
+    box-shadow: 0px 2px 5px 2px var(--shadow_color);
     transform: scale(0) translate(-50%, 0);
     transform-origin: 0;
-    transition-duration: 0.3s;
+    transition: transform 0.3s;
 }
 #new-folder-name {
     color: var(--text_color);
     font-size: 14px;
     width: 50%;
-    padding-left: 10px;
-    padding-top: 5px;
+    padding: 5px 0 0 10px;
     background-color: transparent;
     border: 0;
     outline: 0;
 }
-#create-folder-btn {
+.btn {
     position: absolute;
-    right: 20px;
-    background-color: transparent;
-    width: 60px;
     height: 30px;
+    padding: 0 10px;
+    background-color: transparent;
+    border-radius: 2px;
+    transition: color 0.3s, background-color 0.3s;
+}
+.btn:hover {cursor: pointer;}
+#create-folder-btn {
+    right: 20px;
     color: dodgerblue;
     border: 2px solid dodgerblue;
-    border-radius: 2px;
-    transition-duration: 0.3s;
 }
 #create-folder-btn:hover {
     color: white;
     background-color: dodgerblue;
-    cursor: pointer;
 }
 #cancel-folder-btn {
-    position: absolute;
     right: 90px;
-    background-color: transparent;
-    width: 60px;
-    height: 30px;
     color: red;
     border: 2px solid red;
-    border-radius: 2px;
-    transition-duration: 0.3s;
 }
 #cancel-folder-btn:hover {
     color: white;
     background-color: red;
-    cursor: pointer;
 }
 
-/*Notes and groups*/
+/*Note and group items styling*/
 .folder, .note, #all-notes-div {
+    display: flex;
     float: left;
     position: relative;
-    font-size: 14px;
-    background-color: var(--bg_color);
-    border-left: 5px dodgerblue solid;
     width: 96%;
     height: 30px;
     margin: 4px 2%;
     padding: 5px 10px;
+    font-size: 14px;
+    background-color: var(--bg_color);
+    border-left: 5px dodgerblue solid;
     box-shadow: 0px 1px 5px var(--shadow_color);
     cursor: pointer;
 }
@@ -265,38 +255,34 @@ body {
 }
 #all-notes-count {right: 65px;}
 #all-folders-count {right: 10px;}
-.item-type-icon{
-    font-size: 20px;
+.item-type-icon {
     position: absolute;
+    font-size: 20px;
     left: 5px;
     bottom: 3px;
 }
-.folder-name, .note-title{
+.folder-name, .note-title {
     position: relative;
     left: 25px;
 }
-.folder, .note{display: flex;}
-.folder > span:nth-child(3) {
-    font-size: 20px;
+.folder .folder-delete, .note .note-delete {
     position: absolute;
+    font-size: 20px;
     right: 10px;
     bottom: 5px;
 }
-.folder > span:nth-child(3):hover {color: red;}
+.folder .folder-delete:hover, .note .note-delete:hover {
+    color: red;
+}
 .note .note-move {
-    font-size: 20px;
     position: absolute;
+    font-size: 20px;
     right: 40px;
     bottom: 5px;
 }
-.note .note-move:hover {color: royalblue;}
-.note .note-delete {
-    font-size: 20px;
-    position: absolute;
-    right: 10px;
-    bottom: 5px;
+.note .note-move:hover {
+    color: royalblue;
 }
-.note .note-delete:hover {color: red;}
 
 /*Move-note-to-group modal*/
 #folder-move-div {
@@ -304,117 +290,83 @@ body {
     z-index: 2;
     top: 25%;
     left: 50%;
-    transform: translate(-50%);
     width: 200px;
     height: 30%;
+    padding: 10px 0 0 10px;
     border-radius: 5px;
     box-shadow: 0px 2px 5px 2px var(--shadow_color);
     background-color: var(--bg_color);
-    padding-top: 10px;
-    padding-left: 10px;
-    transform: scale(0,0) translate(-50%, 0);
+    transform: scale(0) translate(-50%, 0);
     transform-origin: 0;
-    transition-duration: 0.3s;  
+    transition: transform 0.3s;  
 }
 #cancel-move-btn {
-    position: absolute;
     right: 10px;
-    background-color: transparent;
-    width: 70px;
-    height: 30px;
     color: red;
     border: 2px solid red;
-    border-radius: 2px;
-    transition-duration: 0.3s;
 }
 #cancel-move-btn:hover {
     color: white;
     background-color: red;
-    cursor: pointer;
-}
-#nothing {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    font-size: 14px;
-    color: var(--font_color);
-    opacity: 0.7;
 }
 .folder-move-item {
     position: relative;
     top: 15px;
     width: 90%;
     height: 30px;
+    padding: 3px 0 0 10px;
+    margin: 0 0 4px 0;
     background-color: var(--bg_color);
     border-left: 5px solid dodgerblue;
     border-radius: 2px;
-    padding-left: 10px;
-    padding-top: 3px;
-    margin-left: 0px;
-    margin-bottom: 4px;
     cursor: pointer;
     overflow-y: auto;
 }
-.folder-move-item:hover {background-color: var(--list_hover_bg);}
+.folder-move-item:hover {
+    background-color: var(--list_hover_bg);
+}
 
 /*Note editor modal*/
 #new-note-name {
     color: var(--text_color);
     font-size: 14px;
     width: 45%;
-    margin-left: 10px;
-    margin-right: 2%;
-    padding-top: 5px;
+    margin: 0 10px 0 7px;
+    padding: 5px 0 0 0;
     background-color: transparent;
     border: 0;
     outline: 0;
 }
 #create-note-btn {
-    position: absolute;
     right: 20px;
-    background-color: transparent;
-    width: 60px;
-    height: 30px;
     color: dodgerblue;
     border: 2px solid dodgerblue;
-    border-radius: 2px;
-    transition-duration: 0.3s;
 }
 #create-note-btn:hover {
     color: white;
     background-color: dodgerblue;
-    cursor: pointer;
 }
 #discard-note-btn {
-    position: absolute;
     right: 85px;
-    background-color: transparent;
-    width: 70px;
-    height: 30px;
     color: red;
     border: 2px solid red;
-    border-radius: 2px;
-    transition-duration: 0.3s;
 }
 #discard-note-btn:hover {
     color: white;
     background-color: red;
-    cursor: pointer;
 }
 #new-note-text {
     color: var(--text_color);
+    position: relative;
     width: 95%;
     height: 85%;
-    position: relative;
+    padding: 10px 0 0 0;
     left: 50%;
     top: 20px;
-    transform: translate(-50%, 0);
-    resize: none;
     background-color: transparent;
-    padding-top: 10px;
+    resize: none;
     border: none;
     border-top: 1px solid var(--font_color);
     outline: 0;
+    transform: translate(-50%, 0);
 }
