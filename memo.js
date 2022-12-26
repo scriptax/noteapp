@@ -1,7 +1,4 @@
-var parentContainer = document.getElementById('memos-container');
-var allNotesFolder = document.getElementById('all-notes-div');
-
-
+// initialize and read previously created notes and groups
 window.addEventListener('load', () => {  
     document.getElementById('move-to-all').addEventListener('click', () => {
         moveToFolder('0000folder');
@@ -15,7 +12,6 @@ window.addEventListener('load', () => {
     `${Number(allStorageValue.notes)} Notes |`;
     document.getElementById('all-folders-count').innerHTML = 
     `${Number(allStorageValue.folders)} Groups`;
-    
 
     let storageKeys = Object.keys(localStorage);
     for(let key of storageKeys) {
@@ -30,23 +26,32 @@ window.addEventListener('load', () => {
     }
 });
 
+// update displayed number of notes
 function noteCounter(num) {
     const allStorageValue = readStorage("0000folder");
     document.getElementById('all-notes-count').innerHTML = 
     `${Number(allStorageValue.notes) + num} Notes |`;
     localStorage.setItem(
-        "0000folder", `_folderName:AllItems_folders:${allStorageValue.folders}_notes:${Number(allStorageValue.notes) + num}`
+        "0000folder", 
+        "_folderName:AllItems" + 
+        `_folders:${allStorageValue.folders}` + 
+        `_notes:${Number(allStorageValue.notes) + num}`
     );
 } 
+// update displayed number of groups
 function folderCounter(num) {
     const allStorageValue = readStorage("0000folder");
     document.getElementById('all-folders-count').innerHTML = 
     `${Number(allStorageValue.folders) + num} Groups`;
     localStorage.setItem(
-        "0000folder", `_folderName:AllItems_folders:${Number(allStorageValue.folders) + num}_notes:${allStorageValue.notes}`
+        "0000folder", 
+        "_folderName:AllItems" + 
+        `_folders:${Number(allStorageValue.folders) + num}` + 
+        `_notes:${allStorageValue.notes}`
     );
 } 
 
+// note-related functionalities
 const noteHandler = {
     noteEditor : document.getElementById('edit-area-container'),
     newNoteTitle : document.getElementById('new-note-name'),
@@ -54,10 +59,10 @@ const noteHandler = {
     notes : {},
     toMoveItemKey : null,
     toEditItemKey : null,
-    editMode : 0,
+    editMode : 0, // initialize mode(0), create mode(1), edit mode(2) 
 
     openNoteEditor() {
-        folderHandler.cancelFolderCreate();
+        folderHandler.closeFolderCreate();
         folderHandler.closeMove();
         this.noteEditor.style.transform = "scale(1) translate(-50%, 0)";
     },
@@ -72,25 +77,28 @@ const noteHandler = {
     delNote(noteDiv, noteIndex,noteMemKey) {
         event.stopPropagation();
         noteCounter(-1);
-        parentContainer.removeChild(noteDiv);
+        noteDiv.remove();
         delete this.notes[`${noteIndex}`];
         localStorage.removeItem(noteMemKey);
     },
 
+    // initialize moving note to group
     toMove(noteMemKey) {
         event.stopPropagation();
         this.closeNoteEditor();
-        folderHandler.cancelFolderCreate();
+        folderHandler.closeFolderCreate();
         this.toMoveItemKey = noteMemKey;
         folderHandler.folderMoveParent.style.transform = "scale(1) translate(-50%, 0)";
     },
 
+    // note edit and create function
     noteCreator(noteName, noteText, prevKey, prevIndex) {
         if(noteName === "") {
             this.newNoteTitle.placeholder = "Title can't be empty!";
             return undefined;
         }
 
+        // when editing an existing note
         if(this.editMode == 2) {
             const storageValue = readStorage(this.toEditItemKey);
             writeStorage.note(
@@ -119,6 +127,7 @@ const noteHandler = {
             index = prevIndex;
         }
 
+        // create note DOM element
         let noteContainer = document.createElement('div');
         noteContainer.setAttribute('class', "note");
         noteContainer.innerHTML = 
@@ -127,10 +136,12 @@ const noteHandler = {
         '<span class="material-symbols-outlined note-move" title="Move Note">drive_file_move</span>' + 
         '<span class="material-symbols-outlined note-delete" title="Delete Note">delete</span>';
 
-        parentContainer.appendChild(noteContainer);
+        document.getElementById('memos-container').appendChild(noteContainer);
         
+        // save note DOM element with unique index for later proccessing
         this.notes[`${index}`] = noteContainer;
 
+        // assign note event handlers
         noteContainer.childNodes[3].addEventListener('click', () => {
             noteHandler.delNote(noteContainer, index, k);
         });
@@ -141,13 +152,11 @@ const noteHandler = {
             showNote(k);
         });    
     
-        this.noteEditor.style.transform = "scale(0) translate(-50%, 0)";
-        this.newNoteTitle.placeholder = "Title";
-        this.newNoteTitle.value = "";
-        this.newNoteText.value = "";
+        this.closeNoteEditor();
     }
 };
 
+// note-related event handlers
 document.getElementById('new-note-btn').addEventListener('click', () => {
     noteHandler.editMode = 1;
     noteHandler.openNoteEditor();
@@ -164,6 +173,7 @@ document.getElementById('create-note-btn').addEventListener('click', () => {
     );
 });
 
+// Groups-related functionalities
 const folderHandler = {
     folderCreatorContainer : document.getElementById('create-folder-div'),
     newFolderName : document.getElementById('new-folder-name'),
@@ -180,7 +190,7 @@ const folderHandler = {
         this.folderCreatorContainer.style.transform = "scale(1) translate(-50%, 0)";
     },
 
-    cancelFolderCreate() {
+    closeFolderCreate() {
         this.folderCreatorContainer.style.transform = "scale(0) translate(-50%, 0)";
         this.newFolderName.placeholder = "Group Name";
         this.newFolderName.value = "";
@@ -189,7 +199,7 @@ const folderHandler = {
     delFolder(folderItself, moveFolderItem, folderMemKey) {
         event.stopPropagation();
         folderCounter(-1);
-        parentContainer.removeChild(folderItself);
+        folderItself.remove();
         this.folderMoveParent.removeChild(moveFolderItem);
         localStorage.removeItem(folderMemKey);
     },
@@ -214,6 +224,7 @@ const folderHandler = {
         let folderContainer = document.createElement('div');
         let noteToFolderItem = document.createElement('div');
         
+        // create group DOM element
         folderContainer.setAttribute('class', "folder");
         noteToFolderItem.setAttribute('class', "folder-move-item");
 
@@ -223,11 +234,14 @@ const folderHandler = {
         '<span class="material-symbols-outlined folder-delete" title="Delete Group">delete</span>';
         noteToFolderItem.innerHTML = folderName;
     
-        parentContainer.insertBefore(folderContainer, allNotesFolder.nextSibling);
+        document.getElementById('memos-container').insertBefore(folderContainer, 
+        document.getElementById('all-notes-div').nextSibling);
         this.folderMoveParent.appendChild(noteToFolderItem);
 
+        // save group DOM element with unique index for later proccessing
         this.folders.push(folderContainer);
     
+        // assign group event handlers
         folderContainer.childNodes[2].addEventListener('click', () => {
             folderHandler.delFolder(folderContainer, noteToFolderItem, key);
         });
@@ -243,12 +257,11 @@ const folderHandler = {
             moveToFolder(key, index);
         });
     
-        this.folderCreatorContainer.style.transform = "scale(0) translate(-50%, 0)";
-        this.newFolderName.placeholder = "Group Name";
-        this.newFolderName.value = "";
+        this.closeFolderCreate();
     }
 };
 
+// group-related event handlers
 document.getElementById('cancel-move-btn').addEventListener('click', () => {
     folderHandler.closeMove();
 });
@@ -258,13 +271,14 @@ document.getElementById('new-folder-btn').addEventListener('click', () => {
 });
 
 document.getElementById('cancel-folder-btn').addEventListener('click', () => {
-    folderHandler.cancelFolderCreate();
+    folderHandler.closeFolderCreate();
 });
 
 document.getElementById('create-folder-btn').addEventListener('click', () => {
     folderHandler.folderCreator(folderHandler.newFolderName.value, 0, null, false);
 });
 
+// move selected note to group
 function moveToFolder(folderKey) {
     const folderStorageValue = readStorage(folderKey);
     const noteStorageValue = readStorage(noteHandler.toMoveItemKey);
@@ -282,6 +296,7 @@ function moveToFolder(folderKey) {
     folderHandler.closeMove();
 }
 
+// show/edit existing note
 function showNote(noteMemKey) {
     const storageValue = readStorage(noteMemKey);
     let noteName = storageValue.noteName;
@@ -293,6 +308,7 @@ function showNote(noteMemKey) {
     noteHandler.openNoteEditor();
 }
 
+// filter notes by group name or search term
 function filterNotes(field, term) {
     let storageKeys = Object.keys(localStorage);
     let filterIndices = [];
@@ -313,16 +329,7 @@ function filterNotes(field, term) {
         noteHandler.notes[`${val}`].style.display = "block";
     });
 }
-
-allNotesFolder.addEventListener('click', () => {
-    for(let elem in noteHandler.notes) {
-        noteHandler.notes[`${elem}`].style.display = "block";
-    }
-    folderHandler.folders.forEach(elem => {
-        elem.style.display = "block";
-    });
-});
-
+// handle search bar
 const invokeSearch = (function() {
     let timer = 0;
     return function() {
@@ -335,11 +342,22 @@ const invokeSearch = (function() {
 })();
 document.getElementById('search-box').addEventListener('click', () => {
     noteHandler.closeNoteEditor();
-    folderHandler.cancelFolderCreate();
+    folderHandler.closeFolderCreate();
     folderHandler.closeMove();
 });
 document.getElementById('search-box').addEventListener('keyup', invokeSearch);
 
+// show all notes
+document.getElementById('all-notes-div').addEventListener('click', () => {
+    for(let elem in noteHandler.notes) {
+        noteHandler.notes[`${elem}`].style.display = "block";
+    }
+    folderHandler.folders.forEach(elem => {
+        elem.style.display = "block";
+    });
+});
+
+// assistive functions to read/write localStorage in the given string form
 function readStorage(storageKey) {
     let storageValue = localStorage.getItem(storageKey);
     let start = 0;
