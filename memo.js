@@ -1,13 +1,18 @@
 // initialize and read previously created notes and groups
 window.addEventListener('load', () => {  
     document.getElementById('move-to-all').addEventListener('click', () => {
-        moveToFolder('0000folder');
+        moveToFolder('noteAppStorageKey0000folder');
     });
 
-    if(localStorage.getItem('0000folder') === null)
-    localStorage.setItem("0000folder", `_folderName:AllItems_folders:0_notes:0`);
+    if(localStorage.getItem('noteAppStorageKey0000folder') === null) {
+        let storeString = JSON.stringify(
+            {folderName: "AllItems", folders: 0, notes: 0}
+        );
+        localStorage.setItem("noteAppStorageKey0000folder", storeString);
+    }
+    
 
-    const allStorageValue = readStorage("0000folder");
+    const allStorageValue = JSON.parse(localStorage.getItem("noteAppStorageKey0000folder"));
     document.getElementById('all-notes-count').innerHTML = 
     `${Number(allStorageValue.notes)} Notes |`;
     document.getElementById('all-folders-count').innerHTML = 
@@ -15,8 +20,8 @@ window.addEventListener('load', () => {
 
     let storageKeys = Object.keys(localStorage);
     for(let key of storageKeys) {
-        if(!/^[0-9]/.test) continue;
-        const storageValue = readStorage(key);
+        if(!key.includes("noteAppStorageKey")) continue;
+        const storageValue = JSON.parse(localStorage.getItem(key));
         if(key.includes("folder")) {
             if(localStorage.getItem(key).includes("AllItems")) continue;
             folderHandler.folderCreator(storageValue.folderName, key, true);
@@ -27,28 +32,28 @@ window.addEventListener('load', () => {
 });
 
 // update displayed number of notes
-function noteCounter(num) {
-    const allStorageValue = readStorage("0000folder");
-    document.getElementById('all-notes-count').innerHTML = 
-    `${Number(allStorageValue.notes) + num} Notes |`;
+function noteCounter(num) { 
+    const allStorageValue = JSON.parse(localStorage.getItem("noteAppStorageKey0000folder"));
+    allStorageValue.notes += num; 
     localStorage.setItem(
-        "0000folder", 
-        "_folderName:AllItems" + 
-        `_folders:${allStorageValue.folders}` + 
-        `_notes:${Number(allStorageValue.notes) + num}`
+        "noteAppStorageKey0000folder", 
+        JSON.stringify(allStorageValue)
     );
+
+    document.getElementById('all-notes-count').innerHTML = 
+    `${allStorageValue.notes} Notes |`;
 } 
 // update displayed number of groups
 function folderCounter(num) {
-    const allStorageValue = readStorage("0000folder");
-    document.getElementById('all-folders-count').innerHTML = 
-    `${Number(allStorageValue.folders) + num} Groups`;
+    const allStorageValue = JSON.parse(localStorage.getItem("noteAppStorageKey0000folder"));
+    allStorageValue.folders += num; 
     localStorage.setItem(
-        "0000folder", 
-        "_folderName:AllItems" + 
-        `_folders:${Number(allStorageValue.folders) + num}` + 
-        `_notes:${allStorageValue.notes}`
+        "noteAppStorageKey0000folder", 
+        JSON.stringify(allStorageValue)
     );
+
+    document.getElementById('all-folders-count').innerHTML = 
+    `${allStorageValue.folders} Groups`;
 } 
 
 // note-related functionalities
@@ -100,14 +105,11 @@ const noteHandler = {
 
         // when editing an existing note
         if(this.editMode == 2) {
-            const storageValue = readStorage(this.toEditItemKey);
-            writeStorage.note(
-                this.toEditItemKey,
-                storageValue.index,
-                noteName,
-                noteText,
-                storageValue.Fldr
-                );
+            const storageValue = JSON.parse(localStorage.getItem(this.toEditItemKey));
+            storageValue.noteName = noteName;
+            storageValue.noteText = noteText;
+            localStorage.setItem(this.toEditItemKey, JSON.stringify(storageValue));
+
             this.notes[`${storageValue.index}`].childNodes[1].innerHTML = noteName;
             this.closeNoteEditor();
             return undefined;
@@ -117,10 +119,15 @@ const noteHandler = {
         let k;
         if(this.editMode == 1) {
             let d = new Date();
-            k = d.getTime();
+            k = `noteAppStorageKey${d.getTime()}`;
             index = "note" + `${Object.keys(this.notes).length}`;
-            writeStorage.note(k, index, noteName, noteText, "AllItems");
-
+            //`_index:${index}_noteName:${noteName}_noteText:${noteText}_Fldr:${Fldr}`
+            //writeStorage.note(k, index, noteName, noteText, "AllItems");
+            let storeString = JSON.stringify(
+                {index: index, noteName: noteName, noteText:noteText, Fldr:"AllItems"}
+            );
+            localStorage.setItem(k, storeString);
+            
             noteCounter(1);
         } else {
             k = prevKey;
@@ -214,9 +221,12 @@ const folderHandler = {
         let key;
         if(!init) {
             let d = new Date();
-            let k = d.getTime();
-            key = k + "folder";
-            writeStorage.folder(key, index, folderName);
+            key = `noteAppStorageKey${d.getTime()}folder`;
+
+            let storeString = JSON.stringify(
+                {index: index, folderName: folderName}
+            );
+            localStorage.setItem(key, storeString);
             folderCounter(1);
         } else {
             key = prevKey;
@@ -280,25 +290,26 @@ document.getElementById('create-folder-btn').addEventListener('click', () => {
 
 // move selected note to group
 function moveToFolder(folderKey) {
-    const folderStorageValue = readStorage(folderKey);
-    const noteStorageValue = readStorage(noteHandler.toMoveItemKey);
+    const folderStorageValue = JSON.parse(localStorage.getItem(folderKey));
+    const noteStorageValue = JSON.parse(localStorage.getItem(noteHandler.toMoveItemKey));
     if(folderStorageValue.folderName === noteStorageValue.Fldr) {
         folderHandler.closeMove();
         return undefined
     }
-    writeStorage.note(
-        noteHandler.toMoveItemKey,
-        noteStorageValue.index,
-        noteStorageValue.noteName,
-        noteStorageValue.noteText,
-        folderStorageValue.folderName
+    let storeString = JSON.stringify({
+            index: noteStorageValue.index,
+            noteName: noteStorageValue.noteName,
+            noteText: noteStorageValue.noteText,
+            Fldr: folderStorageValue.folderName
+        }
     );
+    localStorage.setItem(noteHandler.toMoveItemKey, storeString);
     folderHandler.closeMove();
 }
 
 // show/edit existing note
 function showNote(noteMemKey) {
-    const storageValue = readStorage(noteMemKey);
+    const storageValue = JSON.parse(localStorage.getItem(noteMemKey));
     let noteName = storageValue.noteName;
     let noteText = storageValue.noteText;
     noteHandler.newNoteTitle.value = noteName;
@@ -315,7 +326,7 @@ function filterNotes(field, term) {
     let regex = new RegExp(term, "i");
     for(let key of storageKeys) {
         if(key.includes("folder")) continue;
-        const storageValue = readStorage(key);
+        const storageValue = JSON.parse(localStorage.getItem(key));
         let fieldValue = storageValue[`${field}`];
 
         if(fieldValue.search(regex) != -1) {
