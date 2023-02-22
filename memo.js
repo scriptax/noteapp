@@ -368,42 +368,6 @@ document.getElementById('all-notes-div').addEventListener('click', () => {
     });
 });
 
-// assistive functions to read/write localStorage in the given string form
-function readStorage(storageKey) {
-    let storageValue = localStorage.getItem(storageKey);
-    let start = 0;
-    const startIndices = [];
-    const endIndices = [];
-    while(storageValue.includes(':', start)) {
-        let startIndex = storageValue.indexOf('_', start);
-        let endIndex = storageValue.indexOf(':', start);
-        startIndices.push(startIndex);
-        endIndices.push(endIndex);
-        start = endIndex + 1;
-    }
-
-    const obj = {};
-    for(let i = 0; i < startIndices.length; i++) {
-        let prop =  storageValue.slice(startIndices[i] + 1, endIndices[i]);
-        let value = storageValue.slice(endIndices[i] + 1, startIndices[i + 1]);
-        obj[`${prop}`] = value;
-    }
-    return obj;
-}
-
-const writeStorage = {
-    note: function(key, index, noteName, noteText, Fldr) {
-        let writestr = 
-        `_index:${index}_noteName:${noteName}_noteText:${noteText}_Fldr:${Fldr}`;
-        localStorage.setItem(key, writestr);
-    },
-    folder: function (key, index, folderName) {
-        let writestr = 
-        `_index:${index}_folderName:${folderName}`;
-        localStorage.setItem(key, writestr);
-    }
-};
-
 //Dark-light mode toggle
 document.getElementById('light-dark-div').onclick = () => {
     const btnState = document.getElementById('light-dark-switch').checked;
