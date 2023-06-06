@@ -325,7 +325,7 @@ function filterNotes(field, term) {
     let filterIndices = [];
     let regex = new RegExp(term, "i");
     for(let key of storageKeys) {
-        if(key.includes("folder")) continue;
+        if(key.includes("folder") || !key.includes("noteAppStorageKey")) continue;
         const storageValue = JSON.parse(localStorage.getItem(key));
         let fieldValue = storageValue[`${field}`];
 
