@@ -68,6 +68,11 @@ body {
     top: 50%;
     transform: translate(-50%, -50%);
 }
+@media screen and (max-width: 480px) {
+    #memos-container {
+        height: 90%;
+    }
+}
 #edit-area-container {
     width: 98%;
     max-width: 400px;
