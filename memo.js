@@ -11,7 +11,6 @@ window.addEventListener('load', () => {
         localStorage.setItem("noteAppStorageKey0000folder", storeString);
     }
     
-
     const allStorageValue = JSON.parse(localStorage.getItem("noteAppStorageKey0000folder"));
     document.getElementById('all-notes-count').innerHTML = 
     `${Number(allStorageValue.notes)} Notes |`;
@@ -39,9 +38,7 @@ function noteCounter(num) {
         "noteAppStorageKey0000folder", 
         JSON.stringify(allStorageValue)
     );
-
-    document.getElementById('all-notes-count').innerHTML = 
-    `${allStorageValue.notes} Notes |`;
+    document.getElementById('all-notes-count').innerHTML = `${allStorageValue.notes} Notes |`;
 } 
 // update displayed number of groups
 function folderCounter(num) {
@@ -51,9 +48,7 @@ function folderCounter(num) {
         "noteAppStorageKey0000folder", 
         JSON.stringify(allStorageValue)
     );
-
-    document.getElementById('all-folders-count').innerHTML = 
-    `${allStorageValue.folders} Groups`;
+    document.getElementById('all-folders-count').innerHTML = `${allStorageValue.folders} Groups`;
 } 
 
 // note-related functionalities
@@ -327,17 +322,17 @@ function filterNotes(field, term) {
     for(let key of storageKeys) {
         if(key.includes("folder") || !key.includes("noteAppStorageKey")) continue;
         const storageValue = JSON.parse(localStorage.getItem(key));
-        let fieldValue = storageValue[`${field}`];
+        let fieldValue = storageValue[field];
 
-        if(fieldValue.search(regex) != -1) {
+        if(fieldValue.search(regex) !== -1) {
             filterIndices.push(storageValue.index);
         }
     }
     for(let key in noteHandler.notes) {
-        noteHandler.notes[`${key}`].style.display = "none";
+        noteHandler.notes[key].style.display = "none";
     }
     filterIndices.forEach(val => {
-        noteHandler.notes[`${val}`].style.display = "block";
+        noteHandler.notes[val].style.display = "block";
     });
 }
 // handle search bar
@@ -361,7 +356,7 @@ document.getElementById('search-box').addEventListener('keyup', invokeSearch);
 // show all notes
 document.getElementById('all-notes-div').addEventListener('click', () => {
     for(let elem in noteHandler.notes) {
-        noteHandler.notes[`${elem}`].style.display = "block";
+        noteHandler.notes[elem].style.display = "block";
     }
     folderHandler.folders.forEach(elem => {
         elem.style.display = "block";
