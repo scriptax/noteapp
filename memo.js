@@ -138,7 +138,7 @@ const noteHandler = {
         let noteContainer = document.createElement('div');
         noteContainer.setAttribute('class', "note");
         noteContainer.innerHTML = 
-        `<span class="material-symbols-outlined item-type-icon">description</span>` + 
+        `<span class="material-symbols-outlined item-type-icon">edit_note</span>` + 
         `<span class="note-title">${noteName}</span>` +
         '<span class="material-symbols-outlined note-move" title="Move Note">drive_file_move</span>' + 
         '<span class="material-symbols-outlined note-delete" title="Delete Note">delete</span>';
@@ -370,17 +370,19 @@ document.getElementById('all-notes-div').addEventListener('click', () => {
 
 //Dark-light mode toggle
 document.getElementById('light-dark-div').onclick = () => {
-    const btnState = document.getElementById('light-dark-switch').checked;
+    const dark = document.getElementById('light-dark-switch').checked;
     let r = document.querySelector(':root');
-    if(!btnState) {
+    if(!dark) {
         r.style.setProperty('--bg_color', 'rgb(34, 39, 46)');
         r.style.setProperty('--list_hover_bg', 'rgb(48, 55, 65)');
         r.style.setProperty('--font_color', 'white');
         r.style.setProperty('--text_color', 'white');
+        r.style.setProperty('--icon_color', 'white');
     } else {
         r.style.setProperty('--bg_color', 'white');
         r.style.setProperty('--list_hover_bg', '#ddd');
         r.style.setProperty('--font_color', 'black');
         r.style.setProperty('--text_color', 'black');
+        r.style.setProperty('--icon_color', '#333');
     }  
 };
