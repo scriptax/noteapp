@@ -116,8 +116,6 @@ const noteHandler = {
             let d = new Date();
             k = `noteAppStorageKey${d.getTime()}`;
             index = "note" + `${Object.keys(this.notes).length}`;
-            //`_index:${index}_noteName:${noteName}_noteText:${noteText}_Fldr:${Fldr}`
-            //writeStorage.note(k, index, noteName, noteText, "AllItems");
             let storeString = JSON.stringify(
                 {index: index, noteName: noteName, noteText:noteText, Fldr:"AllItems"}
             );
