@@ -9,7 +9,12 @@ window.addEventListener('load', () => {
             {folderName: "AllItems", folders: 0, notes: 0}
         );
         localStorage.setItem("noteAppStorageKey0000folder", storeString);
+        localStorage.setItem("noteAppDarkMode", "false");
     }
+
+    darkMode = JSON.parse(localStorage.getItem('noteAppDarkMode'));
+    darkModeHandler(darkMode);
+    document.querySelector("#light-dark-switch").checked = !darkMode;
     
     const allStorageValue = JSON.parse(localStorage.getItem("noteAppStorageKey0000folder"));
     document.getElementById('all-notes-count').innerHTML = 
@@ -362,8 +367,7 @@ document.getElementById('all-notes-div').addEventListener('click', () => {
 });
 
 //Dark-light mode toggle
-document.getElementById('light-dark-div').onclick = () => {
-    const dark = document.getElementById('light-dark-switch').checked;
+function darkModeHandler(dark) {
     let r = document.querySelector(':root');
     if(!dark) {
         r.style.setProperty('--bg_color', 'rgb(34, 39, 46)');
@@ -371,11 +375,17 @@ document.getElementById('light-dark-div').onclick = () => {
         r.style.setProperty('--font_color', 'white');
         r.style.setProperty('--text_color', 'white');
         r.style.setProperty('--icon_color', 'white');
+        localStorage.setItem("noteAppDarkMode", "false");
     } else {
         r.style.setProperty('--bg_color', 'white');
         r.style.setProperty('--list_hover_bg', '#ddd');
         r.style.setProperty('--font_color', 'black');
         r.style.setProperty('--text_color', 'black');
         r.style.setProperty('--icon_color', '#333');
+        localStorage.setItem("noteAppDarkMode", "true");
     }  
+}
+document.getElementById('light-dark-div').onclick = () => {
+    const dark = document.getElementById('light-dark-switch').checked;
+    darkModeHandler(dark);
 };
